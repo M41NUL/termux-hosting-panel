@@ -127,6 +127,15 @@ def deploy_site():
         extract_zip(src, tmp_extract)
         shutil.copytree(tmp_extract, site_dir)
         shutil.rmtree(tmp_extract)
+    elif os.path.isfile(src):
+        # Single file (e.g. one .html file) — wrap it in a new site folder.
+        os.makedirs(site_dir, exist_ok=True)
+        fname = os.path.basename(src)
+        if fname.lower().endswith(".html"):
+            dest_name = "index.html"
+        else:
+            dest_name = fname
+        shutil.copy(src, os.path.join(site_dir, dest_name))
     else:
         shutil.copytree(src, site_dir)
 
